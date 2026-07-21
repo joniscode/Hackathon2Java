@@ -5,10 +5,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class Agenda {
+
     private final List<Contacto> contactos;
     private final int capacidadMaxima;
 
-    // Constructor por  10 contactos
+    // Constructor por defecto: 10 contactos
     public Agenda() {
         this(10);
     }
@@ -20,61 +21,68 @@ public class Agenda {
     }
 
     // Validaciones para agregar un nuevo contacto
-    public void añadirContacto(Contacto c) {
+    public void anadirContacto(Contacto c) {
         if (agendaLlena()) {
-            throw new IllegalStateException("La agenda está llena. No se pueden agregar más contactos.");
+            throw new IllegalStateException("La agenda esta llena. No se pueden agregar mas contactos.");
         }
+
         if (c == null) {
-            throw new IllegalArgumentException("No ha ingresado un contacto válido.");
+            throw new IllegalArgumentException("No ha ingresado un contacto valido.");
         }
+
         if (existeContacto(c)) {
             throw new IllegalArgumentException("El contacto ya se encuentra registrado.");
         }
+
         contactos.add(c);
     }
 
-    // verificación de contacto existente
+    // Verificacion de contacto existente
     public boolean existeContacto(Contacto c) {
         if (c == null) return false;
         return contactos.contains(c);
     }
 
-    //Lista de contactos almacenados
+    // Lista de contactos almacenados
     public List<Contacto> listarContactos() {
         List<Contacto> listaOrdenada = new ArrayList<>(contactos);
         Collections.sort(listaOrdenada);
         return listaOrdenada;
     }
 
-    //busqueda del contacto
+    // Busqueda del contacto
     public String buscarContacto(String nombre, String apellido) {
         if (nombre == null || apellido == null) return null;
 
         for (Contacto c : contactos) {
-            if (c.getNombre().equalsIgnoreCase(nombre.trim()) &&
-                    c.getApellido().equalsIgnoreCase(apellido.trim())) {
+            if (c.getNombre().equalsIgnoreCase(nombre.trim())
+                    && c.getApellido().equalsIgnoreCase(apellido.trim())) {
                 return c.getTelefono();
             }
         }
+
         return null;
     }
 
-    // Eliminar un contacto del almacenamiento si se encuentra en la agenda.
+    // Eliminar un contacto
     public boolean eliminarContacto(Contacto c) {
         if (c == null) return false;
         return contactos.remove(c);
     }
 
-    // Actualiza el número telefónico si el contacto existe.
+    // Modificar telefono
     public void modificarTelefono(String nombre, String apellido, String nuevoTelefono) {
+
         if (nombre == null || apellido == null) {
             throw new IllegalArgumentException("Por favor ingresar nombre y apellido.");
         }
 
         Contacto contactoEncontrado = null;
+
         for (Contacto c : contactos) {
-            if (c.getNombre().equalsIgnoreCase(nombre.trim()) &&
-                    c.getApellido().equalsIgnoreCase(apellido.trim())) {
+            if (c.getNombre().equalsIgnoreCase(nombre.trim())
+                    && c.getApellido().equalsIgnoreCase(apellido.trim())) {
+
                 contactoEncontrado = c;
                 break;
             }
@@ -83,21 +91,18 @@ public class Agenda {
         if (contactoEncontrado != null) {
             contactoEncontrado.setTelefono(nuevoTelefono);
         } else {
-            throw new IllegalArgumentException("No se encontró el contacto.");
+            throw new IllegalArgumentException("No se encontro el contacto.");
         }
     }
 
-    // Verificacion de la agenda si ha alcanzado su límite de almacenamiento.
     public boolean agendaLlena() {
         return contactos.size() >= capacidadMaxima;
     }
 
-    //Calculo de espacio disponibles para nuevos contactos.
     public int espaciosLibres() {
         return capacidadMaxima - contactos.size();
     }
 
-    //Obtiene el límite máximo configurado para la agenda.
     public int getCapacidadMaxima() {
         return capacidadMaxima;
     }
