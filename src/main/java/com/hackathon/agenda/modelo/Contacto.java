@@ -3,7 +3,7 @@ package com.hackathon.agenda.modelo;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class Contacto {
+public class Contacto implements Comparable<Contacto> {
 
     // Acepta: "+34 600 000 000", "+34600000000", "600 000 000", "600000000"
     private static final String TELEFONO_REGEX = "^(\\+\\d{1,3}\\s?)?\\d{3}\\s?\\d{3}\\s?\\d{3}$";
@@ -58,7 +58,7 @@ public class Contacto {
         this.telefono = telefono.trim();
     }
 
-    // ---------- Igualdad basada en nombre + apellido (case-insensitive) ----------
+    // ---------- Igualdad basada en nombre + apellido  ----------
 
     @Override
     public boolean equals(Object o) {
@@ -72,6 +72,19 @@ public class Contacto {
     @Override
     public int hashCode() {
         return Objects.hash(nombre.toLowerCase(), apellido.toLowerCase());
+    }
+
+    // ---------- Orden natural: apellido y luego nombre ----------
+
+    @Override
+    public int compareTo(Contacto otro) {
+        int compararApellido = this.apellido.compareToIgnoreCase(otro.apellido);
+
+        if (compararApellido != 0) {
+            return compararApellido;
+        }
+
+        return this.nombre.compareToIgnoreCase(otro.nombre);
     }
 
     @Override
